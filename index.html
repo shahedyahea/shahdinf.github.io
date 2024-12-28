@@ -106,18 +106,55 @@
     </div>
 
     <script>
-        // Placeholder for future functionality
+        // Caesar Cipher Encryption and Decryption Function
+        function caesarCipher(text, shift, action) {
+            let result = '';
+            for (let i = 0; i < text.length; i++) {
+                let char = text[i];
+                if (char.match(/[a-zA-Z]/)) {
+                    const code = text.charCodeAt(i);
+                    let base = (char.toLowerCase() === char) ? 97 : 65; // lowercase or uppercase base
+                    let newCharCode = code + (action === 'encrypt' ? shift : -shift);
+                    
+                    if (newCharCode > base + 25) newCharCode -= 26;
+                    if (newCharCode < base) newCharCode += 26;
+
+                    result += String.fromCharCode(newCharCode);
+                } else {
+                    result += char; // Non-alphabetical characters are unchanged
+                }
+            }
+            return result;
+        }
+
         const encryptBtn = document.getElementById('encryptBtn');
         const decryptBtn = document.getElementById('decryptBtn');
         const outputArea = document.getElementById('outputArea');
+        const textInput = document.getElementById('textInput');
+        const algorithmSelect = document.getElementById('algorithm');
 
         encryptBtn.addEventListener('click', () => {
-            outputArea.textContent = 'Encryption functionality will go here.';
+            const shift = 3; // Shift value for Caesar Cipher
+            const text = textInput.value;
+            if (algorithmSelect.value === 'caesar') {
+                const encryptedText = caesarCipher(text, shift, 'encrypt');
+                outputArea.textContent = `Encrypted Text: ${encryptedText}`;
+            } else {
+                outputArea.textContent = 'This algorithm is not yet implemented.';
+            }
         });
 
         decryptBtn.addEventListener('click', () => {
-            outputArea.textContent = 'Decryption functionality will go here.';
+            const shift = 3; // Shift value for Caesar Cipher
+            const text = textInput.value;
+            if (algorithmSelect.value === 'caesar') {
+                const decryptedText = caesarCipher(text, shift, 'decrypt');
+                outputArea.textContent = `Decrypted Text: ${decryptedText}`;
+            } else {
+                outputArea.textContent = 'This algorithm is not yet implemented.';
+            }
         });
     </script>
 </body>
 </html>
+
