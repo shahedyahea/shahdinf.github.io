@@ -106,27 +106,33 @@
     </div>
 
     <script>
-        // Caesar Cipher Encryption and Decryption Function
-        function caesarCipher(text, shift, action) {
+        // Caesar Cipher Encryption and Decryption
+        function caesarCipher(text, shift, mode) {
             let result = '';
-            for (let i = 0; i < text.length; i++) {
-                let char = text[i];
-                if (char.match(/[a-zA-Z]/)) {
-                    const code = text.charCodeAt(i);
-                    let base = (char.toLowerCase() === char) ? 97 : 65; // lowercase or uppercase base
-                    let newCharCode = code + (action === 'encrypt' ? shift : -shift);
-                    
-                    if (newCharCode > base + 25) newCharCode -= 26;
-                    if (newCharCode < base) newCharCode += 26;
+            const alphabet = 'abcdefghijklmnopqrstuvwxyz';
+            const isUpperCase = (char) => char === char.toUpperCase();
 
-                    result += String.fromCharCode(newCharCode);
+            for (let i = 0; i < text.length; i++) {
+                const char = text[i];
+                if (alphabet.indexOf(char.toLowerCase()) !== -1) {
+                    let newChar = '';
+                    const isUpper = isUpperCase(char);
+                    const index = alphabet.indexOf(char.toLowerCase());
+                    if (mode === 'encrypt') {
+                        newChar = alphabet[(index + shift) % 26];
+                    } else if (mode === 'decrypt') {
+                        newChar = alphabet[(index - shift + 26) % 26];
+                    }
+
+                    result += isUpper ? newChar.toUpperCase() : newChar;
                 } else {
-                    result += char; // Non-alphabetical characters are unchanged
+                    result += char;
                 }
             }
             return result;
         }
 
+        // Handle Button Clicks
         const encryptBtn = document.getElementById('encryptBtn');
         const decryptBtn = document.getElementById('decryptBtn');
         const outputArea = document.getElementById('outputArea');
@@ -134,24 +140,24 @@
         const algorithmSelect = document.getElementById('algorithm');
 
         encryptBtn.addEventListener('click', () => {
-            const shift = 3; // Shift value for Caesar Cipher
             const text = textInput.value;
-            if (algorithmSelect.value === 'caesar') {
-                const encryptedText = caesarCipher(text, shift, 'encrypt');
-                outputArea.textContent = Encrypted Text: ${encryptedText};
+            const algorithm = algorithmSelect.value;
+            if (algorithm === 'caesar') {
+                const shift = 3;  // Shift for Caesar Cipher (you can make it dynamic)
+                outputArea.textContent = caesarCipher(text, shift, 'encrypt');
             } else {
-                outputArea.textContent = 'This algorithm is not yet implemented.';
+                outputArea.textContent = 'Encryption functionality for ' + algorithm + ' will go here.';
             }
         });
 
         decryptBtn.addEventListener('click', () => {
-            const shift = 3; // Shift value for Caesar Cipher
             const text = textInput.value;
-            if (algorithmSelect.value === 'caesar') {
-                const decryptedText = caesarCipher(text, shift, 'decrypt');
-                outputArea.textContent = Decrypted Text: ${decryptedText};
+            const algorithm = algorithmSelect.value;
+            if (algorithm === 'caesar') {
+                const shift = 3;  // Shift for Caesar Cipher (you can make it dynamic)
+                outputArea.textContent = caesarCipher(text, shift, 'decrypt');
             } else {
-                outputArea.textContent = 'This algorithm is not yet implemented.';
+                outputArea.textContent = 'Decryption functionality for ' + algorithm + ' will go here.';
             }
         });
     </script>
