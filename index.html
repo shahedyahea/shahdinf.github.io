@@ -97,6 +97,7 @@
         <textarea id="textInput" placeholder="Enter your text here..."></textarea>
         <select id="algorithm">
             <option value="caesar">Caesar Cipher</option>
+            <option value="vernam">Vernam Cipher</option>
             <option value="aes">AES</option>
             <option value="rsa">RSA</option>
         </select>
@@ -132,6 +133,22 @@
             return result;
         }
 
+        // Vernam Cipher Encryption and Decryption
+        function vernamCipher(text, key, mode) {
+            if (key.length !== text.length) {
+                return 'Error: Key length must equal text length!';
+            }
+            let result = '';
+            for (let i = 0; i < text.length; i++) {
+                const textChar = text.charCodeAt(i);
+                const keyChar = key.charCodeAt(i);
+                if (mode === 'encrypt' || mode === 'decrypt') {
+                    result += String.fromCharCode(textChar ^ keyChar); // XOR operation
+                }
+            }
+            return result;
+        }
+
         // Handle Button Clicks
         const encryptBtn = document.getElementById('encryptBtn');
         const decryptBtn = document.getElementById('decryptBtn');
@@ -142,9 +159,13 @@
         encryptBtn.addEventListener('click', () => {
             const text = textInput.value;
             const algorithm = algorithmSelect.value;
+
             if (algorithm === 'caesar') {
-                const shift = 3;  // Shift for Caesar Cipher (you can make it dynamic)
+                const shift = 3; // Shift for Caesar Cipher
                 outputArea.textContent = caesarCipher(text, shift, 'encrypt');
+            } else if (algorithm === 'vernam') {
+                const key = prompt('Enter the key (same length as the text):');
+                outputArea.textContent = vernamCipher(text, key, 'encrypt');
             } else {
                 outputArea.textContent = 'Encryption functionality for ' + algorithm + ' will go here.';
             }
@@ -153,9 +174,13 @@
         decryptBtn.addEventListener('click', () => {
             const text = textInput.value;
             const algorithm = algorithmSelect.value;
+
             if (algorithm === 'caesar') {
-                const shift = 3;  // Shift for Caesar Cipher (you can make it dynamic)
+                const shift = 3; // Shift for Caesar Cipher
                 outputArea.textContent = caesarCipher(text, shift, 'decrypt');
+            } else if (algorithm === 'vernam') {
+                const key = prompt('Enter the key (same length as the text):');
+                outputArea.textContent = vernamCipher(text, key, 'decrypt');
             } else {
                 outputArea.textContent = 'Decryption functionality for ' + algorithm + ' will go here.';
             }
