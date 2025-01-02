@@ -24,16 +24,10 @@
             text-align: center;
             animation: fadeIn 1s ease-in-out;
         }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1); }
-        }
         h1 {
             color: #ffffff;
             font-size: 28px;
             margin-bottom: 30px;
-            text-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-            font-weight: bold;
         }
         textarea {
             width: 100%;
@@ -43,12 +37,8 @@
             font-size: 16px;
             border: none;
             border-radius: 12px;
-            box-shadow: inset 0 6px 8px rgba(0, 0, 0, 0.2);
-            outline: none;
-            resize: none;
             background-color: #f3e5f5;
             color: #6a1b9a;
-            font-weight: bold;
         }
         select, button {
             width: 100%;
@@ -57,37 +47,19 @@
             font-size: 16px;
             border: none;
             border-radius: 12px;
-            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-            outline: none;
-            transition: all 0.3s;
-        }
-        select {
-            background-color: #ab47bc;
-            color: #ffffff;
-            font-weight: bold;
         }
         button {
             background-color: #7b1fa2;
             color: #ffffff;
-            font-weight: bold;
-            cursor: pointer;
-            transition: transform 0.3s, background-color 0.3s;
-        }
-        button:hover {
-            background-color: #4a148c;
-            transform: scale(1.05);
         }
         .output {
             margin-top: 20px;
             padding: 20px;
             background-color: #ede7f6;
             color: #4a148c;
-            font-weight: bold;
             font-size: 18px;
-            border: 2px solid #ab47bc;
             border-radius: 12px;
             min-height: 60px;
-            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
         }
     </style>
 </head>
@@ -98,7 +70,6 @@
         <select id="algorithm">
             <option value="caesar">Caesar Cipher</option>
             <option value="vernam">Vernam Cipher</option>
-         
         </select>
         <button id="encryptBtn">Encrypt</button>
         <button id="decryptBtn">Decrypt</button>
@@ -106,25 +77,20 @@
     </div>
 
     <script>
-        // Caesar Cipher Encryption and Decryption
+        // Caesar Cipher Function
         function caesarCipher(text, shift, mode) {
-            let result = '';
             const alphabet = 'abcdefghijklmnopqrstuvwxyz';
-            const isUpperCase = (char) => char === char.toUpperCase();
-
-            for (let i = 0; i < text.length; i++) {
-                const char = text[i];
-                if (alphabet.indexOf(char.toLowerCase()) !== -1) {
-                    let newChar = '';
-                    const isUpper = isUpperCase(char);
-                    const index = alphabet.indexOf(char.toLowerCase());
-                    if (mode === 'encrypt') {
-                        newChar = alphabet[(index + shift) % 26];
-                    } else if (mode === 'decrypt') {
-                        newChar = alphabet[(index - shift + 26) % 26];
-                    }
-
-                    result += isUpper ? newChar.toUpperCase() : newChar;
+            let result = '';
+            for (let char of text) {
+                const lowerChar = char.toLowerCase();
+                if (alphabet.includes(lowerChar)) {
+                    const oldIndex = alphabet.indexOf(lowerChar);
+                    const newIndex = mode === 'encrypt'
+                        ? (oldIndex + shift) % 26
+                        : (oldIndex - shift + 26) % 26;
+                    result += char === lowerChar
+                        ? alphabet[newIndex]
+                        : alphabet[newIndex].toUpperCase();
                 } else {
                     result += char;
                 }
@@ -132,41 +98,40 @@
             return result;
         }
 
-        // Vernam Cipher Encryption and Decryption
+        // Vernam Cipher Function
         function vernamCipher(text, key, mode) {
-            if (key.length !== text.length) {
-                return 'Error: Key length must equal text length!';
+            if (text.length !== key.length) {
+                return 'Key must be the same length as the text!';
             }
             let result = '';
             for (let i = 0; i < text.length; i++) {
                 const textChar = text.charCodeAt(i);
                 const keyChar = key.charCodeAt(i);
-                if (mode === 'encrypt' || mode === 'decrypt') {
-                    result += String.fromCharCode(textChar ^ keyChar); // XOR operation
-                }
+                const xorChar = textChar ^ keyChar; // XOR operation
+                result += String.fromCharCode(xorChar);
             }
             return result;
         }
 
-        // Handle Button Clicks
+        // DOM Elements
+        const textInput = document.getElementById('textInput');
+        const algorithmSelect = document.getElementById('algorithm');
         const encryptBtn = document.getElementById('encryptBtn');
         const decryptBtn = document.getElementById('decryptBtn');
         const outputArea = document.getElementById('outputArea');
-        const textInput = document.getElementById('textInput');
-        const algorithmSelect = document.getElementById('algorithm');
 
+        // Event Listeners
         encryptBtn.addEventListener('click', () => {
             const text = textInput.value;
             const algorithm = algorithmSelect.value;
 
             if (algorithm === 'caesar') {
-                const shift = 3; // Shift for Caesar Cipher
-                outputArea.textContent = caesarCipher(text, shift, 'encrypt');
+                outputArea.textContent = caesarCipher(text, 3, 'encrypt');
             } else if (algorithm === 'vernam') {
-                const key = prompt('Enter the key (same length as the text):');
+                const key = prompt('Enter a key of the same length as the text:');
                 outputArea.textContent = vernamCipher(text, key, 'encrypt');
             } else {
-                outputArea.textContent = 'Encryption functionality for ' + algorithm + ' will go here.';
+                outputArea.textContent = 'Unsupported algorithm!';
             }
         });
 
@@ -175,15 +140,15 @@
             const algorithm = algorithmSelect.value;
 
             if (algorithm === 'caesar') {
-                const shift = 3; // Shift for Caesar Cipher
-                outputArea.textContent = caesarCipher(text, shift, 'decrypt');
+                outputArea.textContent = caesarCipher(text, 3, 'decrypt');
             } else if (algorithm === 'vernam') {
-                const key = prompt('Enter the key (same length as the text):');
+                const key = prompt('Enter the key used for encryption:');
                 outputArea.textContent = vernamCipher(text, key, 'decrypt');
             } else {
-                outputArea.textContent = 'Decryption functionality for ' + algorithm + ' will go here.';
+                outputArea.textContent = 'Unsupported algorithm!';
             }
         });
     </script>
 </body>
 </html>
+
