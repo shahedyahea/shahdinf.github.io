@@ -34,6 +34,32 @@ function vernamCipher(text, key, mode) {
     return result;
 }
 
+// Vigenere Cipher Function
+function vigenereCipher(text, key, mode) {
+    const alphabet = 'abcdefghijklmnopqrstuvwxyz';
+    let result = '';
+    key = key.toLowerCase();
+    let keyIndex = 0;
+
+    for (let char of text) {
+        const lowerChar = char.toLowerCase();
+        if (alphabet.includes(lowerChar)) {
+            const textIndex = alphabet.indexOf(lowerChar);
+            const keyShift = alphabet.indexOf(key[keyIndex]);
+            const newIndex = mode === 'encrypt'
+                ? (textIndex + keyShift) % 26
+                : (textIndex - keyShift + 26) % 26;
+            result += char === lowerChar
+                ? alphabet[newIndex]
+                : alphabet[newIndex].toUpperCase();
+            keyIndex = (keyIndex + 1) % key.length;
+        } else {
+            result += char;
+        }
+    }
+    return result;
+}
+
 // DOM Elements
 const textInput = document.getElementById('textInput');
 const algorithmSelect = document.getElementById('algorithm');
@@ -51,6 +77,9 @@ encryptBtn.addEventListener('click', () => {
     } else if (algorithm === 'vernam') {
         const key = prompt('Enter a key of the same length as the text:');
         outputArea.textContent = vernamCipher(text, key, 'encrypt');
+    } else if (algorithm === 'vigenere') {
+        const key = prompt('Enter a key (text):');
+        outputArea.textContent = vigenereCipher(text, key, 'encrypt');
     } else {
         outputArea.textContent = 'Unsupported algorithm!';
     }
@@ -65,6 +94,9 @@ decryptBtn.addEventListener('click', () => {
     } else if (algorithm === 'vernam') {
         const key = prompt('Enter the key used for encryption:');
         outputArea.textContent = vernamCipher(text, key, 'decrypt');
+    } else if (algorithm === 'vigenere') {
+        const key = prompt('Enter the key used for encryption:');
+        outputArea.textContent = vigenereCipher(text, key, 'decrypt');
     } else {
         outputArea.textContent = 'Unsupported algorithm!';
     }
