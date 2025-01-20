@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Encryption & Decryption</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f3e5f5;
+        }
+        .input-text {
+    width: 100%;
+    padding: 14px;
+    font-size: 16px;
+    border: none;
+    border-radius: 12px;
+    background-color: #f3e5f5;
+    color: #6a1b9a;
+    margin-bottom: 20px;
+}
+.input-text:focus {
+    outline: none;
+    border: 2px solid #7b1fa2;
+}
+
+        .container {
+            background: linear-gradient(135deg, #8e24aa, #6a1b9a);
+            padding: 35px;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+            width: 480px;
+            text-align: center;
+        }
+        h1 {
+            color: #ffffff;
+            font-size: 28px;
+            margin-bottom: 30px;
+        }
+        textarea {
+            width: 100%;
+            height: 120px;
+            margin-bottom: 20px;
+            padding: 15px;
+            font-size: 16px;
+            border: none;
+            border-radius: 12px;
+            background-color: #f3e5f5;
+            color: #6a1b9a;
+        }
+        select, button {
+            width: 100%;
+            padding: 14px;
+            margin-bottom: 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 12px;
+        }
+        button {
+            background-color: #7b1fa2;
+            color: #ffffff;
+        }
+        .output {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #ede7f6;
+            color: #4a148c;
+            font-size: 18px;
+            border-radius: 12px;
+            min-height: 60px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Text Encryption & Decryption</h1>
+        <textarea id="textInput" placeholder="Enter your text here..."></textarea>
+        <input class="input-text" type="text" id="textInput" placeholder="Enter your text here..."></input>
+        <select id="algorithm">
+            <option value="Ceasar Cipher.js">Caesar Cipher</option>
+            <option value="Polyalphabatic Cipher.js">Polyalphabatic Cipher</option>
+            <option value="Monoalphabetic Cipher.js">Monoalphabetic Cipher</option>
+            <option value="Vernam Cipher.js">Vernam Cipher</option>
+            <option value="AutoKey cipher.js">AutoKey cipher</option>
+            <option value="Columnar Transposition cipher.js">Columnar Transposition cipher</option>
+            <option value="elgamal cipher.js">elgamal cipher</option>
+            <option value="Hill Cipher.js">Hill Cipher</option>
+            <option value="playfiar cipher.js">Playfiar cipher</option>
+            <option value="rail fence cipher.js">rail fence cipher</option>
+            <option value="S-DES.js">S-DES</option>
+            <option value="Vingenere Cipher.js">Vingenere Cipher</option>
+            <option value="Vingenere Cipher.js">Vingenere Cipher</option>
+
+        </select>
+        <button id="encryptBtn">Encrypt</button>
+        <button id="decryptBtn">Decrypt</button>
+        <div class="output" id="outputArea">Output will appear here...</div>
+    </div>
+    <script src="script.js"></script>
+    <script id="algorithm-file" src=""></script>
+</body>
+</html>
